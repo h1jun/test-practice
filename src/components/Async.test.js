@@ -3,6 +3,11 @@ import Async from "./Async";
 
 describe("비동기 컴포넌트", () => {
   test("renders posts if request succeeds", async () => {
+    window.fetch = jest.fn(); // 내장 fetch 함수를 mock 함수로 덮어 쓰기
+    window.fetch.mockResolvedValueOnce({
+      json: async () => [{ id: "p1", title: "첫 포스트!" }], // fetch를하면 json이 반환되고 then을 해서 date를 받기 때문에 동일한 시나리오로 작성
+    }); // fetch가 호출될 때 resolved 되면 지정한 값을 반환
+
     render(<Async />);
 
     const listItemElements = await screen.findAllByRole("listitem");
